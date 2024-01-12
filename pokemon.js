@@ -55,35 +55,65 @@ class Pokemon {
     }
   }
 
-  expForLevel(n) {
-    // obtener la función de crecimiento del pokedex
-    const growFunction = ExperienceCurves[this.growthRate];
-    // retornar el resultado de llamar a la función pasando `n`
-    return Math.floor(growFunction(n));
+  expForLevel(actualExperience) {
+    let calculating = true
+    let sumLevel = 0
+    while(calculating){
+      let expReq = ExperienceCurves[this.growthRate](this.level + sumLevel)
+      if(actualExperience > expReq){
+        sumLevel++
+      }else{
+        this.level += sumLevel
+        calculating = false
+      } 
 
+    }
+    return sumLevel > 0 ? true : false
   }
 
   prepareForBattle() {
-    // asignar al atributo currentHp la estadistica HP del Pokemon
-    this.currentHp = this.stats.hp
+    this.currentHp = this.stats.HP
+    this.currentMove = null
+    // asignar al atributo currentHp la estadistica HP 
     // resetear el atributo currentMove a null
     this.currentMove = null
   }
 
   receiveDamage(damage) {
-    // reducir currentHp en la cantidad de damage. No debe quedar menor a 0.
+    damage > this.currentHp 
+    ? this.currentHp = 0 
+    : this.currentHp -= damage
   }
 
   setCurrentMove(move) {
-    // buscar el move (string) en el pokedex y asignarlo al atributo currentMove
+    this.currentMove = Moves.find(e => e.name === move)
   }
 
   isFainted() {
-    // retornar si currentHp es 0 o no
+    return this.currentHp === 0 ? true : false
   }
 
   attack(target) {
-    // anunciar "[nombre] used [MOVE]!"
+    console.log(`${this.name} used ${this.currentMove}`)
+    if(this.moveHits()){
+      let hit = this.calculateBaseDamage(target)
+      if(this.isCritical()){
+        hit *= 1.5
+        console.log("it's a critic hit")
+      }
+
+      let effectivity = this.calculateEffectiveness(target)
+      if(effectivity > 1){
+        console.log("and it's very effective")
+      }else if(effectivity < 1){
+        console.log("It's not very effective...")
+      }
+      hit *= effectivity
+      
+      target.receiveDamage(hit)
+    }else{
+      console.log("But it MISSED!")
+    }
     // determinar si el movimiento "pega" con moveHits()
     // si "pega":
     //  calcular daño base con calculateDamage
@@ -99,30 +129,53 @@ class Pokemon {
   }
 
   moveHits() {
-    // calcular si pega en base al accuracy del currentMove
+    return randomBetween(0, 100) > this.currentMove.accuracy 
+    ? true 
+    : false 
   }
 
   isCritical() {
     // 1/16 de probabilidad que sea critico
+    return randomBetween(1, 16) === 1 
+    ? true 
+    : false
   }
 
   calculateBaseDamage(target) {
-    // determinar si el movimiento es especial comparando el currentMove con la data de Pokedex (SpecialMoveTypes)
-    // determinar si se usara el stat attack o specialAttack del atacante
-    // determinar si se usara el stat defense o specialDefense del defensor
-    // retornar el rsultado de la formula de daño
+    
+    let sMove = SpecialMoveTypes.find(sM === this.currentMove.type)
+    let offensiveStat = sMove ? this.specialAttack : this.attack
+    let targetDefensiveStat = sMove ? target.specialDefense : target.defense 
+
+    return Math.floor(Math.floor(Math.floor(2 * this.level / 5.0 + 2) * offensiveStat * this.currentMove.power / targetDefensiveStat) / 50) + 2
   }
 
   calculateEffectiveness(target) {
+    let res = 1
+    target.type.forEach(type =>{
+      res *= TypeMultiplier[this.currentMove.type][type] || 1
+    })
+    return res
     // caluclar el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
   }
 
   processVictory(target) {
+    let gainedExp = Math.floor(target.baseExp * target.level / 7)
+    this.experiencePoints += gainedExp
+    this.effortValues[target.effortPoints.type] += target.effortPoints.amount
+
+    console.log(`${this.name} gained ${gainedExp} experience points`)
+    
+    let levelUp = this.expForLevel(this.experiencePoints)
+    
+    if(levelUp){
+      console.log(`${this.name} reached level ${this.level}`)
+    }
     // calcular la experiencia ganada e incrementarla a tus experiencePoints
     // incrementar los effortValues en la estadística correspondiente con la información de effortPoints del oponente
     // anunciar "[nombre] gained [cantidad] experience points"
     // verificar si los nuevos experiencePoints te llevan a subir de nivel
     // si se sube de nivel
     // incrementar nivel y Anunciar "[nombre] reached level [nivel]!"
-  }
+  } 
 }
