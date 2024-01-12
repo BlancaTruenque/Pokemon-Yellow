@@ -1,29 +1,73 @@
 class Pokemon {
   constructor(species, name, level) {
     // Inicializar atributos usando los parámetros
+    this.species = species;
+    this.name = name || species;
+    this.level = level;
     // Inicializar atributos usando la información del Pokedex
+    let pokemonInfo = Pokemons.find((pokemon) => pokemon.species === species );
+    this.type = pokemonInfo.type;
+    this.baseExp = pokemonInfo.baseExp;
+    this.effortPoints = pokemonInfo.effortPoints;
+    this.growthRate = pokemonInfo.growthRate;
+    this.baseStats = pokemonInfo.baseStats;
+    this.moves = pokemonInfo.moves;
     // Inicializar atributos según otras indicaciones
-    // this.experiencePoints = ;
-    // this.individualValues = ;
-    // this.effortValues = ;
+    this.experiencePoints = level === 1 ? 0 : this.expForLevel(level);
+    this.individualValues = {
+      hp: randomBetween(0 , 31) ,
+      attack: randomBetween(0 , 31) ,
+      defense: randomBetween(0 , 31) ,
+      specialAttack: randomBetween(0 , 31) ,
+      specialDefense: randomBetween(0 , 31) ,
+      speed: randomBetween(0 , 31) ,
+    } ;
+    this.effortValues = {
+      hp: 0,
+      attack: 0,
+      defense: 0,
+      specialAttack: 0,
+      specialDefense: 0,
+      speed: 0,
+    } ;
   }
 
   get stats() {
     const stats = {};
+    const statNames = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
 
-    // calcular las estadisticas actuales del Pokémon
-
+    for (const statName of statNames) {
+      stats[statName] = this.calcularStat(statName);
+    }
     return stats;
+  }
+   // calcular las estadisticas actuales del Pokémon
+  calcularStat(statName) {
+    const baseStat = this.baseStats[statName];
+    const individualValue = this.individualValues[statName];
+    const effortValue = this.effortValues[statName];
+    const statEffort = Math.floor(effortValue / 4);
+
+    if (statName === 'hp') {
+      return Math.floor(((2 * baseStat + individualValue + statEffort) * this.level) / 100 + this.level + 10);
+    } else {
+      return Math.floor(((2 * baseStat + individualValue + statEffort) * this.level) / 100 + 5);
+    }
   }
 
   expForLevel(n) {
     // obtener la función de crecimiento del pokedex
+    const growFunction = ExperienceCurves[this.growthRate];
     // retornar el resultado de llamar a la función pasando `n`
+    return Math.floor(growFunction(n));
+
   }
 
   prepareForBattle() {
     // asignar al atributo currentHp la estadistica HP del Pokemon
+    this.currentHp = this.stats.hp
     // resetear el atributo currentMove a null
+    this.currentMove = null
   }
 
   receiveDamage(damage) {
