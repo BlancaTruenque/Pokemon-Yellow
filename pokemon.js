@@ -1,41 +1,84 @@
 class Pokemon {
-  constructor(species, name, level) {
-    // Inicializar atributos usando los parámetros
-    // Inicializar atributos usando la información del Pokedex
-    // Inicializar atributos según otras indicaciones
-    // this.experiencePoints = ;
-    // this.individualValues = ;
-    // this.effortValues = ;
+  constructor(species, name, level = 1) {
+    this.species = species
+    this.name = name || species
+    this.level = level
+    const pokemon = Pokemons.find(pokemon => pokemon.species === species)
+    this.type = pokemon.type
+    this.moves = pokemon.moves
+    this.baseExp = pokemon.baseExp
+    this.effortPoints = pokemon.effortPoints
+    this.growthRate = pokemon.growthRate
+    this.baseStats = pokemon.baseStats
+    this.experiencePoints = level === 1 ? 0 : ExperienceCurves[this.growthRate](this.level)
+    this.individualValues = {
+      hp : randomBetween(0, 31),
+      attack : randomBetween(0, 31),
+      defense : randomBetween(0, 31),
+      specialAttack : randomBetween(0, 31),
+      specialDefense : randomBetween(0, 31),
+      speed : randomBetween(0, 31)
+    }
+    this.effortValues = {
+      hp : 0,
+      attack : 0,
+      defense : 0,
+      specialAttack : 0,
+      specialDefense : 0,
+      speed : 0
+    }
+    
+    
   }
 
   get stats() {
-    const stats = {};
+    const stats = {
+      Species: this.species,
+      level: this.level,
+      "experience points": Math.floor(this.experiencePoints),
+      type: this.type.join(", "),
 
-    // calcular las estadisticas actuales del Pokémon
+      HP : Math.floor((2 * this.baseStats.hp + this.individualValues.hp + (this.effortValues.hp / 4)) * this.level / 100 + this.level + 10),
 
+      Attack :  Math.floor((2 * this.baseStats.attack + this.individualValues.attack + (this.effortValues.attack / 4)) * this.level / 100 + 5),
+
+      Defense :  Math.floor((2 * this.baseStats.defense + this.individualValues.defense + (this.effortValues.defense / 4)) * this.level / 100 + 5),
+
+      SpecialAttack :  Math.floor((2 * this.baseStats.specialAttack + this.individualValues.specialAttack + (this.effortValues.specialAttack / 4)) * this.level / 100 + 5),
+
+      SpecialDefense :  Math.floor((2 * this.baseStats.specialDefense + this.individualValues.specialDefense + (this.effortValues.specialDefense / 4)) * this.level / 100 + 5),
+
+      Speed : Math.floor((2 * this.baseStats.speed + this.individualValues.speed + (this.effortValues.speed / 4)) * this.level / 100 + 5)
+      
+      
+    };
     return stats;
   }
 
   expForLevel(n) {
-    // obtener la función de crecimiento del pokedex
-    // retornar el resultado de llamar a la función pasando `n`
+    return ExperienceCurves[this.growthRate](n)
   }
 
   prepareForBattle() {
-    // asignar al atributo currentHp la estadistica HP del Pokemon
+    this.currentHp = this.stats.HP
+    this.setCurrentMove = null
+    // asignar al atributo currentHp la estadistica HP 
     // resetear el atributo currentMove a null
   }
 
   receiveDamage(damage) {
-    // reducir currentHp en la cantidad de damage. No debe quedar menor a 0.
+    damage > this.currentHp 
+    ? this.currentHp = 0 
+    : this.currentHp -= damage
   }
 
   setCurrentMove(move) {
     // buscar el move (string) en el pokedex y asignarlo al atributo currentMove
+    this.currentMove = moves.find(e => e.name === move)
   }
 
   isFainted() {
-    // retornar si currentHp es 0 o no
+    return this.currentHp === 0 ? true : false
   }
 
   attack(target) {
