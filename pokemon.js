@@ -1,4 +1,4 @@
-class Pokemon {
+export class Pokemon {
   constructor(species, name, level) {
     // Inicializar atributos usando los parámetros
     // Inicializar atributos usando la información del Pokedex
