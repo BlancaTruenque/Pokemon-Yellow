@@ -1,14 +1,23 @@
 class Battle {
   constructor(player1, player2) {
     // asigna los jugadores a sus respectivos atributos
+    this,player1 = player1;
+    this.player2 = player2;
   }
 
   start() {
-    // Anunciar "The battle is about to start!"
+    // Anunciar "The battle is about to start!"\
+    console.log("he battle is about to start!")
     // preparar la batalla con prepareBattle()
+    this.prepareBattle
     // Usar un bucle para todos los turnos
     // Ambos jugadores seleccionan un movimiento
     // Si al seleccionar un movimiento, retorna 'true' terminar la batalla y anunciar "[nombre] run away!"
+    while (true) { 
+      const movePlayer1 = this.player1.selectMove();
+      const movePlayer2 = this.player2.selectMove();
+      return ` `$]`
+  }
     // Calcular quien atacara primero
     // El primero ataca al segundo
     // Si el segundo aun no se desmaya...

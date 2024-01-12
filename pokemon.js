@@ -13,7 +13,7 @@ class Pokemon {
     this.baseStats = pokemonInfo.baseStats;
     this.moves = pokemonInfo.moves;
     // Inicializar atributos según otras indicaciones
-    this.experiencePoints = level === 1 ? 0 : this.expForLevel(level);
+    this.experiencePoints = level === 1 ? 0 : ExperienceCurves[this.growthRate](this.level);
     this.individualValues = {
       hp: randomBetween(0 , 31) ,
       attack: randomBetween(0 , 31) ,
