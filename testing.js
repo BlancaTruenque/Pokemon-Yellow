@@ -1,5 +1,0 @@
-const test = new Pokemon("Spearow", "lula",3)
-console.dir(test)
-console.table(test.stats)
-test.prepareForBattle()
-console.log(test.currentHp)
