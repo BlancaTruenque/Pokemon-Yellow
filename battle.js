@@ -7,11 +7,48 @@ class Battle {
   start() {
     console.log("The battle is about to start!")
     this.prepareBattle()
-    let finished 
-    while(!finished){
+    
+    while(true){
+      this.printBattleStatus()
       this.player1.selectMove()
-       finished = this.player1.pokemon.isFainted() 
-      || this.player2.pokemon.isFainted()
+      if(this.player1.selectMove() === true){
+        console.log(`${this.player1.name} run away!`)
+        break
+      }
+      this.player2.selectMove()
+      if(this.player2.selectMove() === true){
+        console.log(`${this.player2.name} run away!`)
+        break
+      }
+      let firstToAttack = this.getFirstPokemon()
+      if(firstToAttack === this.player1.pokemon){
+        firstToAttack.attack(this.player2.pokemon)
+
+        if(this.player2.pokemon.isFainted()){
+          this.player1.pokemon.processVictory(this.player2.pokemon)
+          return 
+        }
+        this.player2.pokemon.attack(firstToAttack)
+
+        if(firstToAttack.isFainted()){
+          console.log(`${this.player2.pokemon.name} Won over ${this.player1.pokemon.name}`)
+          return 
+        }
+        
+      }else{
+        firstToAttack.attack(this.player1.pokemon)
+
+        if(this.player1.pokemon.isFainted()){
+          console.log(`${this.player2.pokemon.name} Won over ${this.player1.pokemon.name}`)
+          return 
+        }
+        this.player1.pokemon.attack(firstToAttack)
+
+        if(firstToAttack.isFainted()){
+          this.player1.pokemon.processVictory(firstToAttack)
+          return 
+        }
+      }
     }
     // Anunciar "The battle is about to start!"
     // preparar la batalla con prepareBattle()
@@ -95,7 +132,10 @@ class Battle {
   
 
   printBattleStatus() {
-    console.table(this.player1.name, this.player1.pokemon.name , this.player1.pokemon.level, this.player1.pokemon.currentHp)
+    console.table({
+      "player 1" :{trainer:this.player1.name,pokemon: this.player1.pokemon.name ,level: this.player1.pokemon.level,hp: this.player1.pokemon.currentHp},
+      "player 2" : {trainer:this.player2.name,pokemon: this.player2.pokemon.name ,level: this.player2.pokemon.level,hp: this.player2.pokemon.currentHp}
+    })
     // usar console.table para mostrar el status de la batalla (player, pokemon, level, currentHp)
     
   }

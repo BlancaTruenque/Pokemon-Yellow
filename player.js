@@ -8,14 +8,12 @@ class Player {
 
   selectMove() {
     // mostrar al usuario los movimientos disponibles
-    console.table(this.pokemon.moves);
     let selectMove = "";
     let moves = "";
 
     for (let i = 0; i < this.pokemon.moves.length; i++) {
       moves = moves + this.pokemon.moves[i] + "\n";
     }
-    console.log(moves);
 
     while (true) {
       selectMove = prompt(`Choose a move: \n${moves}

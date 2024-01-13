@@ -85,7 +85,7 @@ class Pokemon {
   }
 
   prepareForBattle() {
-    this.currentHp = this.stats.HP;
+    this.currentHp = this.stats.hp;
     this.currentMove = null;
     // asignar al atributo currentHp la estadistica HP
     // resetear el atributo currentMove a null
@@ -107,6 +107,7 @@ class Pokemon {
     console.log(`${this.name} used ${this.currentMove.name}`);
     if (this.moveHits()) {
       let hit = this.calculateBaseDamage(target);
+      
       if (this.isCritical()) {
         hit *= 1.5;
         console.log("it's a critic hit");
@@ -118,9 +119,11 @@ class Pokemon {
       } else if (effectivity < 1) {
         console.log("It's not very effective...");
       }
-      hit *= effectivity;
-
+     
+      hit *= effectivity 
+      
       target.receiveDamage(hit);
+      console.log("it hit "+ target.name +" with "+ hit +" damage")
     } else {
       console.log("But it MISSED!");
     }
@@ -139,7 +142,7 @@ class Pokemon {
   }
 
   moveHits() {
-    return randomBetween(0, 100) > this.currentMove.accuracy ? true : false;
+    return randomBetween(1, 100) < this.currentMove.accuracy ? true : false;
   }
 
   isCritical() {
@@ -148,20 +151,13 @@ class Pokemon {
   }
 
   calculateBaseDamage(target) {
-    let sMove = SpecialMoveTypes.find(sM === this.currentMove.type);
-    let offensiveStat = sMove ? this.specialAttack : this.attack;
-    let targetDefensiveStat = sMove ? target.specialDefense : target.defense;
+    let sMove = SpecialMoveTypes.find(sM => sM === this.currentMove.type);
+    let offensiveStat = sMove ? this.stats.specialAttack : this.stats.attack;
+    let targetDefensiveStat = sMove ? target.stats.specialDefense : target.stats.defense;
 
-    return (
-      Math.floor(
-        Math.floor(
-          (Math.floor((2 * this.level) / 5.0 + 2) *
-            offensiveStat *
-            this.currentMove.power) /
-            targetDefensiveStat
-        ) / 50
-      ) + 2
-    );
+    return (Math.floor(Math.floor(Math.floor(2 * this.level / 5.0 + 2) * offensiveStat * this.currentMove.power / targetDefensiveStat) / 50) + 2)
+
+
   }
 
   calculateEffectiveness(target) {
@@ -177,7 +173,8 @@ class Pokemon {
     let gainedExp = Math.floor((target.baseExp * target.level) / 7);
     this.experiencePoints += gainedExp;
     this.effortValues[target.effortPoints.type] += target.effortPoints.amount;
-
+    console.log(`${target.name} FAINTED`)
+    console.log(`${this.name} WON THE BATTLE!`)
     console.log(`${this.name} gained ${gainedExp} experience points`);
 
     let levelUp = this.expForLevel(this.experiencePoints);
