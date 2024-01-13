@@ -7,6 +7,12 @@ class Battle {
   start() {
     console.log("The battle is about to start!")
     this.prepareBattle()
+    let finished 
+    while(!finished){
+      this.player1.selectMove()
+       finished = this.player1.pokemon.isFainted() 
+      || this.player2.pokemon.isFainted()
+    }
     // Anunciar "The battle is about to start!"
     // preparar la batalla con prepareBattle()
     // Usar un bucle para todos los turnos
@@ -24,6 +30,10 @@ class Battle {
   }
 
   prepareBattle() {
+    this.player1.pokemon.prepareForBattle()
+    this.player2.pokemon.prepareForBattle()
+    console.log(`${this.player1.name} sent out ${this.player1.pokemon.name}!`)
+    console.log(`${this.player2.name} sent out ${this.player2.pokemon.name}!`)
     // llamar a prepareForBattle de los pokemones de ambos jugadores
     // anunciar "[judgador]sent out [POKEMON]!" para ambos jugadores
   }
@@ -85,6 +95,7 @@ class Battle {
   
 
   printBattleStatus() {
+    console.table(this.player1.name, this.player1.pokemon.name , this.player1.pokemon.level, this.player1.pokemon.currentHp)
     // usar console.table para mostrar el status de la batalla (player, pokemon, level, currentHp)
     
   }

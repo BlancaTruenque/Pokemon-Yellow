@@ -19,20 +19,24 @@ class Player {
 
     while (true) {
       selectMove = prompt(`Choose a move: \n${moves}
-      `);
+      `, this.pokemon.currentMove !== null 
+      ? this.pokemon.currentMove.name 
+      : this.pokemon.moves[0] );
 
       // retornar 'true' en caso el usuario apreta Cancel
       if (selectMove === null) {
         return true;
       }
 
-      if (this.pokemon.moves.includes(selectMove)) break;
+      if (this.pokemon.moves.includes(selectMove)) {
+        this.pokemon.setCurrentMove(selectMove);
+        return
+      }
       alert("Invalid option");
       // Volver a pedir si ingresa un movimiento invalido
     }
 
     // Asigna el movimiento con 'setCurrentMove'
-    this.pokemon.setCurrentMove(selectMove);
   }
 }
 

@@ -89,7 +89,6 @@ class Pokemon {
     this.currentMove = null;
     // asignar al atributo currentHp la estadistica HP
     // resetear el atributo currentMove a null
-    this.currentMove = null;
   }
 
   receiveDamage(damage) {
