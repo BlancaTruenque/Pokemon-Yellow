@@ -34,14 +34,14 @@ class Game {
 
   train(player) {
     const bot = new Bot("Random Person", Pokemons[randomBetween(0, 6)].species, undefined, randomBetween(1, 5))
-    console.log(`${bot.name} challenges ${player.name} for training`)
-    console.log(`${bot.name} has a ${bot.pokemon.species} level ${bot.pokemon.level} `)
+    console.log(`${player.name} challenges ${bot.name} for training.`)
+    console.log(`${bot.name} has a ${bot.pokemon.species} level ${bot.pokemon.level}.`)
     let fight = confirm("Do you want to fight?")
     if(fight){
       const battle = new Battle(player, bot)
       battle.start()
     }else{
-      console.log("you did not take de challenge")
+      console.log("You didn't accept the challenge.")
     }
     // Crear un Bot llamado "Random Person", con un Pokemon aleatorio de nivel entre 1 y 5
     // Anunciar "[nombre] challenges [oponente] for training"
@@ -54,15 +54,15 @@ class Game {
 
   challengeLeader(player) {
     const bot = new Bot("Brock","Onix", "Champion Onix", 10)
-    console.log(`YOU challenges ${bot.name} for Gym leadership`)
-    console.log(`${bot.name} has a ${bot.pokemon.species} level ${bot.pokemon.level} `)
+    console.log(`${player.name} challenges ${bot.name} for Gym leadership.`)
+    console.log(`${bot.name} has a ${bot.pokemon.species} level ${bot.pokemon.level}.`)
     let fight = confirm("Do you want to continue?")
     if(fight){
       const battle = new Battle(player, bot)
       battle.start()
-      bot.pokemon.isFainted() && console.log("congratulations!! you won over leader of gym Brock")
+      bot.pokemon.isFainted() && console.log("Congratulations! You won over Brock. Now, you're the new gym leader.")
     }else{
-      console.log("you did not take de challenge")
+      console.log("You didn't accept the challenge.")
     }
     // mismo mecanismo que train() pero el Bot se llama Brock y usa un Onix nivel 10
   }
@@ -155,14 +155,14 @@ When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER`);
       }
       if (isValid.includes(option)) return option
 
-      console.log("you need to choose a valid option")
+      console.log("Select a valid option.")
     }
     // pedir al usuario que elija entre "Train", "Stats", "Leader";
     // retornar una opcion valida
   }
 
   static goodbye() {
-    console.log("%cThanks for playing Pokemon Yellow", "font-weight: bold");
-    console.log("This game was created with love by: Alexis, Blanca, Fernando, Hillary and Walter");
+    console.log("%cThanks for playing Pokemon Yellow!", "font-weight: bold");
+    console.log("This game was created with love by: Alexis, Blanca, Fernando, Hillary and Walter.");
   }
 }

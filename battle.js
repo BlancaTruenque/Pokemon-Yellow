@@ -12,12 +12,12 @@ class Battle {
       this.printBattleStatus()
       this.player1.selectMove()
       if(this.player1.selectMove() === true){
-        console.log(`${this.player1.name} run away!`)
+        console.log(`${this.player1.name} ran away!`)
         break
       }
       this.player2.selectMove()
       if(this.player2.selectMove() === true){
-        console.log(`${this.player2.name} run away!`)
+        console.log(`${this.player2.name} ran away!`)
         break
       }
       let firstToAttack = this.getFirstPokemon()
@@ -31,7 +31,7 @@ class Battle {
         this.player2.pokemon.attack(firstToAttack)
 
         if(firstToAttack.isFainted()){
-          console.log(`${this.player2.pokemon.name} Won over ${this.player1.pokemon.name}`)
+          console.log(`${this.player2.pokemon.name} won over ${this.player1.pokemon.name}.`)
           return 
         }
         
@@ -39,7 +39,7 @@ class Battle {
         firstToAttack.attack(this.player1.pokemon)
 
         if(this.player1.pokemon.isFainted()){
-          console.log(`${this.player2.pokemon.name} Won over ${this.player1.pokemon.name}`)
+          console.log(`${this.player2.pokemon.name} won over ${this.player1.pokemon.name}.`)
           return 
         }
         this.player1.pokemon.attack(firstToAttack)
