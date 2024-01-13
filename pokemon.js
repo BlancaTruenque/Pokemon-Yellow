@@ -5,7 +5,7 @@ class Pokemon {
     this.name = name || species;
     this.level = level;
     // Inicializar atributos usando la información del Pokedex
-    let pokemonInfo = Pokemons.find((pokemon) => pokemon.species === species );
+    let pokemonInfo = Pokemons.find((pokemon) => pokemon.species === species);
     this.type = pokemonInfo.type;
     this.baseExp = pokemonInfo.baseExp;
     this.effortPoints = pokemonInfo.effortPoints;
@@ -13,15 +13,16 @@ class Pokemon {
     this.baseStats = pokemonInfo.baseStats;
     this.moves = pokemonInfo.moves;
     // Inicializar atributos según otras indicaciones
-    this.experiencePoints = level === 1 ? 0 : ExperienceCurves[this.growthRate](this.level);
+    this.experiencePoints =
+      level === 1 ? 0 : ExperienceCurves[this.growthRate](this.level);
     this.individualValues = {
-      hp: randomBetween(0 , 31) ,
-      attack: randomBetween(0 , 31) ,
-      defense: randomBetween(0 , 31) ,
-      specialAttack: randomBetween(0 , 31) ,
-      specialDefense: randomBetween(0 , 31) ,
-      speed: randomBetween(0 , 31) ,
-    } ;
+      hp: randomBetween(0, 31),
+      attack: randomBetween(0, 31),
+      defense: randomBetween(0, 31),
+      specialAttack: randomBetween(0, 31),
+      specialDefense: randomBetween(0, 31),
+      speed: randomBetween(0, 31),
+    };
     this.effortValues = {
       hp: 0,
       attack: 0,
@@ -29,90 +30,100 @@ class Pokemon {
       specialAttack: 0,
       specialDefense: 0,
       speed: 0,
-    } ;
+    };
   }
 
   get stats() {
     const stats = {};
-    const statNames = ['hp', 'attack', 'defense', 'specialAttack', 'specialDefense', 'speed'];
+    const statNames = [
+      "hp",
+      "attack",
+      "defense",
+      "specialAttack",
+      "specialDefense",
+      "speed",
+    ];
 
     for (const statName of statNames) {
       stats[statName] = this.calcularStat(statName);
     }
     return stats;
   }
-   // calcular las estadisticas actuales del Pokémon
+  // calcular las estadisticas actuales del Pokémon
   calcularStat(statName) {
     const baseStat = this.baseStats[statName];
     const individualValue = this.individualValues[statName];
     const effortValue = this.effortValues[statName];
     const statEffort = Math.floor(effortValue / 4);
 
-    if (statName === 'hp') {
-      return Math.floor(((2 * baseStat + individualValue + statEffort) * this.level) / 100 + this.level + 10);
+    if (statName === "hp") {
+      return Math.floor(
+        ((2 * baseStat + individualValue + statEffort) * this.level) / 100 +
+          this.level +
+          10
+      );
     } else {
-      return Math.floor(((2 * baseStat + individualValue + statEffort) * this.level) / 100 + 5);
+      return Math.floor(
+        ((2 * baseStat + individualValue + statEffort) * this.level) / 100 + 5
+      );
     }
   }
 
   expForLevel(actualExperience) {
-    let calculating = true
-    let sumLevel = 0
-    while(calculating){
-      let expReq = ExperienceCurves[this.growthRate](this.level + sumLevel)
-      if(actualExperience > expReq){
-        sumLevel++
-      }else{
-        this.level += sumLevel
-        calculating = false
-      } 
-
+    let calculating = true;
+    let sumLevel = 0;
+    while (calculating) {
+      let expReq = ExperienceCurves[this.growthRate](this.level + sumLevel);
+      if (actualExperience > expReq) {
+        sumLevel++;
+      } else {
+        this.level += sumLevel;
+        calculating = false;
+      }
     }
-    return sumLevel > 0 ? true : false
+    return sumLevel > 0 ? true : false;
   }
 
   prepareForBattle() {
-    this.currentHp = this.stats.HP
-    this.currentMove = null
-    // asignar al atributo currentHp la estadistica HP 
+    this.currentHp = this.stats.HP;
+    this.currentMove = null;
+    // asignar al atributo currentHp la estadistica HP
     // resetear el atributo currentMove a null
-    this.currentMove = null
+    this.currentMove = null;
   }
 
   receiveDamage(damage) {
-    damage > this.currentHp 
-    ? this.currentHp = 0 
-    : this.currentHp -= damage
+    damage > this.currentHp ? (this.currentHp = 0) : (this.currentHp -= damage);
   }
 
   setCurrentMove(move) {
-    this.currentMove = Moves.find(e => e.name === move)
+    this.currentMove = Moves.find((e) => e.name === move);
   }
 
   isFainted() {
-    return this.currentHp === 0 ? true : false
+    return this.currentHp === 0 ? true : false;
   }
 
   attack(target) {
-    console.log(`${this.name} used ${this.currentMove}`)
-    if(this.moveHits()){
-      let hit = this.calculateBaseDamage(target)
-      if(this.isCritical()){
-        hit *= 1.5
-        console.log("it's a critic hit")
+    console.log(`${this.name} used ${this.currentMove.name}`);
+    if (this.moveHits()) {
+      let hit = this.calculateBaseDamage(target);
+      if (this.isCritical()) {
+        hit *= 1.5;
+        console.log("it's a critic hit");
       }
 
-      let effectivity = this.calculateEffectiveness(target)
-      if(effectivity > 1){
-        console.log("and it's very effective")
-      }else if(effectivity < 1){
-        console.log("It's not very effective...")
+      let effectivity = this.calculateEffectiveness(target);
+      if (effectivity > 1) {
+        console.log("and it's very effective");
+      } else if (effectivity < 1) {
+        console.log("It's not very effective...");
       }
-      hit *= effectivity
-      
-      target.receiveDamage(hit)
-    }else{
-      console.log("But it MISSED!")
+      hit *= effectivity;
+
+      target.receiveDamage(hit);
+    } else {
+      console.log("But it MISSED!");
     }
     // determinar si el movimiento "pega" con moveHits()
     // si "pega":
@@ -129,47 +140,51 @@ class Pokemon {
   }
 
   moveHits() {
-    return randomBetween(0, 100) > this.currentMove.accuracy 
-    ? true 
-    : false 
+    return randomBetween(0, 100) > this.currentMove.accuracy ? true : false;
   }
 
   isCritical() {
     // 1/16 de probabilidad que sea critico
-    return randomBetween(1, 16) === 1 
-    ? true 
-    : false
+    return randomBetween(1, 16) === 1 ? true : false;
   }
 
   calculateBaseDamage(target) {
-    
-    let sMove = SpecialMoveTypes.find(sM === this.currentMove.type)
-    let offensiveStat = sMove ? this.specialAttack : this.attack
-    let targetDefensiveStat = sMove ? target.specialDefense : target.defense 
+    let sMove = SpecialMoveTypes.find(sM === this.currentMove.type);
+    let offensiveStat = sMove ? this.specialAttack : this.attack;
+    let targetDefensiveStat = sMove ? target.specialDefense : target.defense;
 
-    return Math.floor(Math.floor(Math.floor(2 * this.level / 5.0 + 2) * offensiveStat * this.currentMove.power / targetDefensiveStat) / 50) + 2
+    return (
+      Math.floor(
+        Math.floor(
+          (Math.floor((2 * this.level) / 5.0 + 2) *
+            offensiveStat *
+            this.currentMove.power) /
+            targetDefensiveStat
+        ) / 50
+      ) + 2
+    );
   }
 
   calculateEffectiveness(target) {
-    let res = 1
-    target.type.forEach(type =>{
-      res *= TypeMultiplier[this.currentMove.type][type] || 1
-    })
-    return res
+    let res = 1;
+    target.type.forEach((type) => {
+      res *= TypeMultiplier[this.currentMove.type][type] || 1;
+    });
+    return res;
     // caluclar el multiplicador de efectividad tomando el tipo del currentMove y el tipo de pokemon del oponente
   }
 
   processVictory(target) {
-    let gainedExp = Math.floor(target.baseExp * target.level / 7)
-    this.experiencePoints += gainedExp
-    this.effortValues[target.effortPoints.type] += target.effortPoints.amount
+    let gainedExp = Math.floor((target.baseExp * target.level) / 7);
+    this.experiencePoints += gainedExp;
+    this.effortValues[target.effortPoints.type] += target.effortPoints.amount;
 
-    console.log(`${this.name} gained ${gainedExp} experience points`)
-    
-    let levelUp = this.expForLevel(this.experiencePoints)
-    
-    if(levelUp){
-      console.log(`${this.name} reached level ${this.level}`)
+    console.log(`${this.name} gained ${gainedExp} experience points`);
+
+    let levelUp = this.expForLevel(this.experiencePoints);
+
+    if (levelUp) {
+      console.log(`${this.name} reached level ${this.level}`);
     }
     // calcular la experiencia ganada e incrementarla a tus experiencePoints
     // incrementar los effortValues en la estadística correspondiente con la información de effortPoints del oponente
@@ -177,5 +192,5 @@ class Pokemon {
     // verificar si los nuevos experiencePoints te llevan a subir de nivel
     // si se sube de nivel
     // incrementar nivel y Anunciar "[nombre] reached level [nivel]!"
-  } 
+  }
 }
