@@ -31,7 +31,7 @@ class Battle {
         this.player2.pokemon.attack(firstToAttack)
 
         if(firstToAttack.isFainted()){
-            console.log(`${this.player2.pokemon.name} Won over {this.player1.pokemon.name}`)
+          console.log(`${this.player2.pokemon.name} Won over ${this.player1.pokemon.name}`)
           return 
         }
         
