@@ -24,6 +24,7 @@ class Game {
   }
 
   showStats() {
+    console.table()
     // usar console.table para presentar las estadisticas de tu pokemon:
     /*
       - species
@@ -84,12 +85,24 @@ When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER`);
   }
 
   static menu() {
+    let option = ""
+    let isValid = ["Train", "Stats", "Leader"]
+    while(true){
+      option = prompt(`what'd you like to do now? \n
+      Train \n
+      Stats \n
+      Leader
+      `, "Train")
+      if (isValid.includes(option)) return option
+
+      console.log("you need to choose a valid option")
+    }
     // pedir al usuario que elija entre "Train", "Stats", "Leader";
     // retornar una opcion valida
   }
 
   static goodbye() {
     console.log("%cThanks for playing Pokemon Yellow", "font-weight: bold");
-    console.log("This game was created with love by: ...");
+    console.log("This game was created with love by: Alexis, Blanca, Fernando, Hillary and Walter");
   }
 }
