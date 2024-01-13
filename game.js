@@ -11,13 +11,13 @@ class Game {
       // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
         switch (chooseMenu) {
           case "Train":
-            this.train()
+            this.train(player)
             break;
           case "Leader":
-            this.challengeLeader()
+            this.challengeLeader(player)
             break;
           case "Stats":
-            this.showStats()
+            this.showStats(player.pokemon)
             break;
           default:
             break;
@@ -32,7 +32,17 @@ class Game {
     Game.goodbye()
   }
 
-  train() {
+  train(player) {
+    const bot = new Bot("Random Person", Pokemons[randomBetween(0, 6)].species, undefined, randomBetween(1, 5))
+    console.log(`${bot.name} challenges ${player.name} for training`)
+    console.log(`${bot.name} has a ${bot.pokemon.species} level ${bot.pokemon.level} `)
+    let fight = confirm("Do you want to fight?")
+    if(fight){
+      const battle = new Battle(player, bot)
+      battle.start()
+    }else(
+      console.log("you did not take de challenge")
+    )
     // Crear un Bot llamado "Random Person", con un Pokemon aleatorio de nivel entre 1 y 5
     // Anunciar "[nombre] challenges [oponente] for training"
     // Anunciar "[oponente] has a [pokemon] level [nivel]"
@@ -46,8 +56,20 @@ class Game {
     // mismo mecanismo que train() pero el Bot se llama Brock y usa un Onix nivel 10
   }
 
-  showStats() {
-    console.table()
+  showStats(pokemon) {
+    console.table({
+      species: pokemon.species,
+      level: pokemon.level,
+      type: pokemon.type.join(" "),
+      "experience points": pokemon.experiencePoints,
+      stats:"",
+      HP: pokemon.stats.hp,
+      attack: pokemon.stats.attack,
+      defense: pokemon.stats.defense,
+      "special attack": pokemon.stats.specialAttack,
+      "special Defense": pokemon.stats.specialDefense,
+      speed: pokemon.stats.speed      
+    })
     // usar console.table para presentar las estadisticas de tu pokemon:
     /*
       - species

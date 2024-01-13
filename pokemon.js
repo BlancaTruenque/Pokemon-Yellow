@@ -14,7 +14,7 @@ class Pokemon {
     this.moves = pokemonInfo.moves;
     // Inicializar atributos según otras indicaciones
     this.experiencePoints =
-      level === 1 ? 0 : ExperienceCurves[this.growthRate](this.level);
+      level === 1 ? 0 : Math.floor( ExperienceCurves[this.growthRate](this.level));
     this.individualValues = {
       hp: randomBetween(0, 31),
       attack: randomBetween(0, 31),
