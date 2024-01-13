@@ -26,20 +26,63 @@ class Battle {
   }
 
   getFirstPokemon() {
-    // verificar si un pokemon empieza por tener movimiento con mayor prioridad con firstByPriority
+     // verificar si un pokemon empieza por tener movimiento con mayor prioridad con firstByPriority
+    let pokemonByPriority = this.firstByPriority();
+    if(pokemonByPriority!==null){
+      return pokemonByPriority;
+    }
+
     // verificar si un pokemon empieza por tener  mayor velocidad con firstBySpeed
-    // si no, elegir uno de manera aleatorio
+    let pokemonBySpeed = this.firstBySpeed();
+    if(pokemonBySpeed!==null){
+      return pokemonBySpeed;
+    }
+  // si no, elegir uno de manera aleatorio
+    if(randomBetween(1, 2) === 1) {
+      return this.player1.pokemon
+    } else {
+      return this.player2.pokemon
+    }
+    
+
   }
 
   firstByPriority() {
     // retornar el pokemon con movimiento de mayor prioridad. Si igualan, retornar null
+  if (this.player1.pokemon.currentMove.priority===this.player2.pokemon.currentMove.priority){
+    return null;
+   }
+   
+   if (this.player1.pokemon.currentMove.priority > this.player2.pokemon.currentMove.priority){
+    return this.player1.pokemon;
+
+   } else {
+    return this.player2.pokemon;
+   }
   }
 
   firstBySpeed() {
     // retornar el pokemon de mayor velocidad. Si igualan, retornar null
+    if (
+      this.player1.pokemon.baseStats.speed ===
+      this.player2.pokemon.baseStats.speed
+    ) {
+      return null;
+    }
+
+    if (
+      this.player1.pokemon.baseStats.speed >
+      this.player2.pokemon.baseStats.speed
+    ) {
+      return this.player1.pokemon;
+    } else {
+      return this.player2.pokemon;
+    }
   }
+  
 
   printBattleStatus() {
-    // usar conole.table para mostrar el status de la batalla (player, pokemon, level, currentHp)
+    // usar console.table para mostrar el status de la batalla (player, pokemon, level, currentHp)
+    
   }
 }
