@@ -37,6 +37,9 @@ class Player {
 }
 
 class Bot extends Player {
+  constructor(name, species, pokeName, level){
+    super(name, species, pokeName, level)
+  }
   selectMove() {
     // selecciona un movimiento de maner aleatoria
     let indexRandom = randomBetween(0, this.pokemon.moves.length -1);
