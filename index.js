@@ -18,8 +18,12 @@ function asyncVersion() {
             seconds--; 
 // Recuerda 'cancelar' el intervalo cuando llegue a 0 segundos               
         } else {
-            clearInterval(intervalId)
+            clearInterval(intervalId);
+            syncVersion();
+
         }
     },1100);
 }
+
+
 asyncVersion()
