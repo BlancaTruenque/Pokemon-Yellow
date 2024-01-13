@@ -4,7 +4,6 @@ class Game {
     const [name, pokemon, pokemonName] = Game.welcome()
     // crear un Player con la info obtenida (tu pokemon empieza con nivel 3 por defecto). Asignarlo al atributo 'player'
     const player = new Player(name, pokemon, pokemonName, 3);
-    this.player = player
     // Empezar el bucle del juego
     while (true) {
     // Usar menu() para pedir al usuario que elija entre Train, Leader o Stats
