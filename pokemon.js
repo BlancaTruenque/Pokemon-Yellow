@@ -1,15 +1,18 @@
 class Pokemon {
-  constructor(species, name, level = 1) {
+  constructor(species, name, level) {
+    // Inicializar atributos usando los parámetros
     this.species = species;
     this.name = name || species;
     this.level = level;
-    const pokemon = Pokemons.find((pokemon) => pokemon.species === species);
-    this.type = pokemon.type;
-    this.moves = pokemon.moves;
-    this.baseExp = pokemon.baseExp;
-    this.effortPoints = pokemon.effortPoints;
-    this.growthRate = pokemon.growthRate;
-    this.baseStats = pokemon.baseStats;
+    // Inicializar atributos usando la información del Pokedex
+    let pokemonInfo = Pokemons.find((pokemon) => pokemon.species === species);
+    this.type = pokemonInfo.type;
+    this.baseExp = pokemonInfo.baseExp;
+    this.effortPoints = pokemonInfo.effortPoints;
+    this.growthRate = pokemonInfo.growthRate;
+    this.baseStats = pokemonInfo.baseStats;
+    this.moves = pokemonInfo.moves;
+    // Inicializar atributos según otras indicaciones
     this.experiencePoints =
       level === 1 ? 0 : ExperienceCurves[this.growthRate](this.level);
     this.individualValues = {
@@ -31,68 +34,39 @@ class Pokemon {
   }
 
   get stats() {
-    const stats = {
-      Species: this.species,
-      level: this.level,
-      "experience points": Math.floor(this.experiencePoints),
-      type: this.type.join(", "),
+    const stats = {};
+    const statNames = [
+      "hp",
+      "attack",
+      "defense",
+      "specialAttack",
+      "specialDefense",
+      "speed",
+    ];
 
-      HP: Math.floor(
-        ((2 * this.baseStats.hp +
-          this.individualValues.hp +
-          this.effortValues.hp / 4) *
-          this.level) /
-          100 +
+    for (const statName of statNames) {
+      stats[statName] = this.calcularStat(statName);
+    }
+    return stats;
+  }
+  // calcular las estadisticas actuales del Pokémon
+  calcularStat(statName) {
+    const baseStat = this.baseStats[statName];
+    const individualValue = this.individualValues[statName];
+    const effortValue = this.effortValues[statName];
+    const statEffort = Math.floor(effortValue / 4);
+
+    if (statName === "hp") {
+      return Math.floor(
+        ((2 * baseStat + individualValue + statEffort) * this.level) / 100 +
           this.level +
           10
-      ),
-
-      Attack: Math.floor(
-        ((2 * this.baseStats.attack +
-          this.individualValues.attack +
-          this.effortValues.attack / 4) *
-          this.level) /
-          100 +
-          5
-      ),
-
-      Defense: Math.floor(
-        ((2 * this.baseStats.defense +
-          this.individualValues.defense +
-          this.effortValues.defense / 4) *
-          this.level) /
-          100 +
-          5
-      ),
-
-      SpecialAttack: Math.floor(
-        ((2 * this.baseStats.specialAttack +
-          this.individualValues.specialAttack +
-          this.effortValues.specialAttack / 4) *
-          this.level) /
-          100 +
-          5
-      ),
-
-      SpecialDefense: Math.floor(
-        ((2 * this.baseStats.specialDefense +
-          this.individualValues.specialDefense +
-          this.effortValues.specialDefense / 4) *
-          this.level) /
-          100 +
-          5
-      ),
-
-      Speed: Math.floor(
-        ((2 * this.baseStats.speed +
-          this.individualValues.speed +
-          this.effortValues.speed / 4) *
-          this.level) /
-          100 +
-          5
-      ),
-    };
-    return stats;
+      );
+    } else {
+      return Math.floor(
+        ((2 * baseStat + individualValue + statEffort) * this.level) / 100 + 5
+      );
+    }
   }
 
   expForLevel(actualExperience) {
@@ -115,6 +89,7 @@ class Pokemon {
     this.currentMove = null;
     // asignar al atributo currentHp la estadistica HP
     // resetear el atributo currentMove a null
+    this.currentMove = null;
   }
 
   receiveDamage(damage) {
