@@ -40,9 +40,9 @@ class Game {
     if(fight){
       const battle = new Battle(player, bot)
       battle.start()
-    }else(
+    }else{
       console.log("you did not take de challenge")
-    )
+    }
     // Crear un Bot llamado "Random Person", con un Pokemon aleatorio de nivel entre 1 y 5
     // Anunciar "[nombre] challenges [oponente] for training"
     // Anunciar "[oponente] has a [pokemon] level [nivel]"
@@ -52,7 +52,18 @@ class Game {
     // empezar la batalla con su start
   }
 
-  challengeLeader() {
+  challengeLeader(player) {
+    const bot = new Bot("Brock","Onix", "Champion Onix", 10)
+    console.log(`YOU challenges ${bot.name} for Gym leadership`)
+    console.log(`${bot.name} has a ${bot.pokemon.species} level ${bot.pokemon.level} `)
+    let fight = confirm("Do you want to continue?")
+    if(fight){
+      const battle = new Battle(player, bot)
+      battle.start()
+      bot.pokemon.isFainted() && console.log("congratulations!! you won over leader of gym Brock")
+    }else{
+      console.log("you did not take de challenge")
+    }
     // mismo mecanismo que train() pero el Bot se llama Brock y usa un Onix nivel 10
   }
 
