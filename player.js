@@ -1,7 +1,4 @@
 class Player {
-  // name;
-  // pokemon;
-
   constructor(name, species, pokeName, level) {
     // asignar name a un atributo con el mismo nombre
     this.name = name;
@@ -12,24 +9,26 @@ class Player {
   selectMove() {
     // mostrar al usuario los movimientos disponibles
     console.table(this.pokemon.moves);
-    const selectMove = prompt("choose a move");
+    let selectMove = "";
+    let moves = "";
 
-    // retornar 'true' en caso el usuario apreta Cancel
-    if (selectMove === null) {
-      return true;
-    }
-
-    let isIncorrect = true;
     for (let i = 0; i < this.pokemon.moves.length; i++) {
-      console.log(this.pokemon.moves[i]);
-      if (selectMove === this.pokemon.moves[i]) {
-        isIncorrect = false;
-      }
+      moves = moves + this.pokemon.moves[i] + "\n";
     }
+    console.log(moves);
 
-    // Volver a pedir si ingresa un movimiento invalido
-    if (isIncorrect) {
-      this.selectMove();
+    while (true) {
+      selectMove = prompt(`Choose a move: \n${moves}
+      `);
+
+      // retornar 'true' en caso el usuario apreta Cancel
+      if (selectMove === null) {
+        return true;
+      }
+
+      // Volver a pedir si ingresa un movimiento invalido
+      if (this.pokemon.moves.includes(selectMove)) break;
+      alert("Invalid option");
     }
 
     // Asigna el movimiento con 'setCurrentMove'
@@ -40,7 +39,8 @@ class Player {
 class Bot extends Player {
   selectMove() {
     // selecciona un movimiento de maner aleatoria
+    let indexRandom = randomBetween(0, this.pokemon.moves.length);
     // los asigna con 'setCurrentMove'
-    //this.pokemon[ramdonNum]
+    this.pokemon.setCurrentMove(this.pokemon.moves[indexRandom]);
   }
 }
