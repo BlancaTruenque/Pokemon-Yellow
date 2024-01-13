@@ -1,9 +1,12 @@
 class Battle {
   constructor(player1, player2) {
-    // asigna los jugadores a sus 
+    this.player1 = player1
+    this.player2 = player2
   }
 
   start() {
+    console.log("The battle is about to start!")
+    this.prepareBattle()
     // Anunciar "The battle is about to start!"
     // preparar la batalla con prepareBattle()
     // Usar un bucle para todos los turnos
