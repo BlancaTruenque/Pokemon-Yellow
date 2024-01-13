@@ -1,12 +1,36 @@
 class Game {
   start() {
     // llamar a welcome para el proceso de bienvenida y obtener el arreglo [name, pokemon, pokemonName]
+    const [name, pokemon, pokemonName] = Game.welcome()
     // crear un Player con la info obtenida (tu pokemon empieza con nivel 3 por defecto). Asignarlo al atributo 'player'
+    const player = new Player(name, pokemon, pokemonName, 3);
+    this.player = player
     // Empezar el bucle del juego
+    while (true) {
     // Usar menu() para pedir al usuario que elija entre Train, Leader o Stats
-    // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
-    // Continuar el bucle hasta que el usuario aprete Cancel
+      const chooseMenu = Game.menu()
+      // Ejecutar train(), challengeLeader() o showStats() segun la opción del usuario
+        switch (chooseMenu) {
+          case "Train":
+            train(this.player)
+            break;
+          case "Leader":
+            challengeLeader(this.player)
+            break;
+          case "Stats":
+            showStats(this.player)
+            break;
+          default:
+            break;
+        }
+      // Continuar el bucle hasta que el usuario aprete Cancel
+      if (chooseMenu === null){
+        break
+      }
+
+    }
     // Llamar a goodbye para la despedida
+    Game.goodbye()
   }
 
   train() {
@@ -92,7 +116,11 @@ When you feel ready you can challenge BROCK, the PEWTER's GYM LEADER`);
       Train \n
       Stats \n
       Leader
-      `, "Train")
+      `, "Train");
+      if (option === null) {
+        // Si el usuario presiona "Cancelar", retornar null
+        return null;
+      }
       if (isValid.includes(option)) return option
 
       console.log("you need to choose a valid option")
