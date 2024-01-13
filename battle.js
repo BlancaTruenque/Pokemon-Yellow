@@ -1,6 +1,6 @@
 class Battle {
   constructor(player1, player2) {
-    // asigna los jugadores a sus respectivos atributos
+    // asigna los jugadores a sus 
   }
 
   start() {

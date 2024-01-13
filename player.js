@@ -26,9 +26,9 @@ class Player {
         return true;
       }
 
-      // Volver a pedir si ingresa un movimiento invalido
       if (this.pokemon.moves.includes(selectMove)) break;
       alert("Invalid option");
+      // Volver a pedir si ingresa un movimiento invalido
     }
 
     // Asigna el movimiento con 'setCurrentMove'
@@ -37,9 +37,12 @@ class Player {
 }
 
 class Bot extends Player {
+  constructor(name, species, pokeName, level){
+    super(name, species, pokeName, level)
+  }
   selectMove() {
     // selecciona un movimiento de maner aleatoria
-    let indexRandom = randomBetween(0, this.pokemon.moves.length);
+    let indexRandom = randomBetween(0, this.pokemon.moves.length -1);
     // los asigna con 'setCurrentMove'
     this.pokemon.setCurrentMove(this.pokemon.moves[indexRandom]);
   }

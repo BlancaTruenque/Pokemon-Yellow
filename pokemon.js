@@ -105,7 +105,7 @@ class Pokemon {
   }
 
   attack(target) {
-    console.log(`${this.name} used ${this.currentMove}`);
+    console.log(`${this.name} used ${this.currentMove.name}`);
     if (this.moveHits()) {
       let hit = this.calculateBaseDamage(target);
       if (this.isCritical()) {
